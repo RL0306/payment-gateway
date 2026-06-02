@@ -35,7 +35,7 @@ public class PaymentController {
       responses = {
           @ApiResponse(responseCode = "200", description = "Payment processed successfully"),
           @ApiResponse(responseCode = "400", description = "Invalid payment details"),
-          @ApiResponse(responseCode = "500", description = "Server error")
+          @ApiResponse(responseCode = "503", description = "Server error")
       }
   )
   @PostMapping
