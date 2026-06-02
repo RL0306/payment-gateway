@@ -1,0 +1,100 @@
+{
+  "info": {
+    "_postman_id": "fb436ea9-554f-4195-aba0-c80f12332381",
+    "name": "payment-gateway",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "27612173"
+  },
+  "item": [
+    {
+      "name": "create payment - success",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"card_number\": \"2222405343248877\",\r\n  \"expiry_month\": 12,\r\n  \"expiry_year\": 2030,\r\n  \"currency\": \"GBP\",\r\n  \"amount\": 1150,\r\n  \"cvv\": 123\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/v1/payments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8090",
+          "path": [
+            "api",
+            "v1",
+            "payments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get payment by id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8090/api/v1/payments/ee21143f-54b1-4f83-8748-948b16b496f3",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8090",
+          "path": [
+            "api",
+            "v1",
+            "payments",
+            "ee21143f-54b1-4f83-8748-948b16b496f3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "create payment - bank unavailable",
+      "request": {
+        "method": "POST",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "create payment - bad request",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"card_number\": \"22224053\",\r\n  \"expiry_month\": 12,\r\n  \"expiry_year\": 2030,\r\n  \"currency\": \"GBP\",\r\n  \"amount\": 1150,\r\n  \"cvv\": 123\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8090/api/v1/payments",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8090",
+          "path": [
+            "api",
+            "v1",
+            "payments"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package com.checkout.payment.gateway.enums;
+package com.checkout.payment.gateway.model;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
