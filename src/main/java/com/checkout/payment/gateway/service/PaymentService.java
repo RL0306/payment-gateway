@@ -27,7 +27,15 @@ public class PaymentService {
 
   public PostPaymentResponse getPaymentById(UUID id) {
     LOG.debug("Requesting access to to payment with ID {}", id);
-    return paymentsRepository.get(id).orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+    PostPaymentResponse payment = paymentsRepository.get(id)
+        .orElseThrow(() -> {
+          LOG.warn("Payment with ID {} was not found", id);
+          return new PaymentNotFoundException("Payment not found");
+        });
+
+    LOG.debug("Payment with ID {} retrieved successfully", id);
+
+    return payment;
   }
 
   public PostPaymentResponse processPayment(PostPaymentRequest paymentRequest) {
