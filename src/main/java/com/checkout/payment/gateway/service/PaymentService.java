@@ -39,12 +39,29 @@ public class PaymentService {
   }
 
   public PostPaymentResponse processPayment(PostPaymentRequest paymentRequest) {
+    String cardLastFourDigits = getLastFourDigits(paymentRequest.getCardNumber());
+
+    LOG.info(
+        "Payment request received for card ending {}, currency={}, amount={}",
+        cardLastFourDigits,
+        paymentRequest.getCurrency(),
+        paymentRequest.getAmount()
+    );
+
+
     boolean expiryDateValid = isExpiryDateValid(paymentRequest);
     if(!expiryDateValid){
+      LOG.warn(
+          "Payment request rejected due to expired card. cardEnding={}, expiryMonth={}, expiryYear={}",
+          cardLastFourDigits,
+          paymentRequest.getExpiryMonth(),
+          paymentRequest.getExpiryYear()
+      );
+
       throw new InvalidExpiryDateException("Expiry date must be in the future");
     }
 
-    LOG.info("Processing payment for card ending {}", getLastFourDigits(paymentRequest.getCardNumber()));
+    LOG.info("Processing payment for card ending {}", cardLastFourDigits);
 
     BankPaymentResponse bankResponse = bankClient.processPayment(paymentRequest);
 
@@ -53,7 +70,7 @@ public class PaymentService {
     PostPaymentResponse paymentResponse = PostPaymentResponse.builder()
         .id(paymentId)
         .status(bankResponse.isAuthorized() ? PaymentStatus.AUTHORIZED : PaymentStatus.DECLINED)
-        .cardNumberLastFour(getLastFourDigits(paymentRequest.getCardNumber()))
+        .cardNumberLastFour(cardLastFourDigits)
         .expiryMonth(paymentRequest.getExpiryMonth())
         .expiryYear(paymentRequest.getExpiryYear())
         .currency(paymentRequest.getCurrency())
@@ -82,10 +99,6 @@ public class PaymentService {
             request.getExpiryYear(),
             request.getExpiryMonth());
 
-    if (!expiryDate.isAfter(YearMonth.now())) {
-      return false;
-    }
-
-    return true;
+    return expiryDate.isAfter(YearMonth.now());
   }
 }
